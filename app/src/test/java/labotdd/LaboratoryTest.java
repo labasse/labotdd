@@ -102,6 +102,23 @@ class LaboratoryTest {
         );
     }
 
+    @Test void initWithProductNamedLikeASubstanceThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () ->
+            new Laboratory(new String[]{"A", "B"}, Map.of(
+                "A", List.of(new Laboratory.Reagent("B", 1.0))
+            ))
+        );
+    }
+
+    @Test void initWithNotExistingSubstanceThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () ->
+            new Laboratory(new String[]{"A", "B"}, Map.of(
+                "A", List.of(new Laboratory.Reagent("C", 1.0))
+            ))
+        );
+    }
+
+
     @Test void addUnknownSubstanceThrowsIllegalArgumentException() {
         var test = newLaboratoryAB();
         

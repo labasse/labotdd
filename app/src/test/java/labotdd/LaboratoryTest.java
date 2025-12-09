@@ -1,14 +1,15 @@
 package labotdd;
 
+import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LaboratoryTest {
     public Laboratory newLaboratory(String... substances) {
-        return new Laboratory(substances);
+        return new Laboratory(substances, new HashMap<>());
     }
     public Laboratory newLaboratoryAB() {
-        return new Laboratory(new String[]{"A", "B"});
+        return newLaboratory("A", "B");
     }
     public void asserQuantityAB(Laboratory lab, double expectedQtyForA, double expectedQtyForB) {
         assertEquals(expectedQtyForA, lab.getQuantity("A"), .0001);
@@ -31,7 +32,7 @@ class LaboratoryTest {
 
     @Test void initWithNullSubstanceListThrowsNullReferenceException() {
         assertThrows(NullPointerException.class, 
-            () -> new Laboratory(null)
+            () -> new Laboratory(null, new HashMap<>())
         );
     }
 
@@ -50,6 +51,12 @@ class LaboratoryTest {
     @Test void initWithListHavingNullStringSubstanceThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
             newLaboratory("A", null)
+        );
+    }
+
+    @Test void initWithNullReactionMap() {
+        assertThrows(NullPointerException.class, () ->
+            new Laboratory(new String[]{"A", "B"}, null)
         );
     }
 

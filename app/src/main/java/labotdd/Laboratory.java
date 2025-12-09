@@ -2,9 +2,12 @@ package labotdd;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 public class Laboratory {
-    public Laboratory(String[] substances) {
+    public record Reagent(String name, double quantity) {}
+
+    public Laboratory(String[] substances, Map<String, List<Reagent>> reactions) {
         if(substances.length == 0) {
             throw new IllegalArgumentException("Substance list cannot be empty");
         }

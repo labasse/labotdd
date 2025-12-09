@@ -9,20 +9,23 @@ public class Laboratory {
             throw new IllegalArgumentException("Substance list cannot be empty");
         }
         for(var s : substances) {
-            if(s == null || s.isEmpty() || substanceList.containsKey(s)) {
+            if(s == null || s.isEmpty() || containsSubstance(s)) {
                 throw new IllegalArgumentException("Substance cannot be null, empty or duplicate: " + s);
             }
             substanceList.put(s, 0.0);
         }
     }
+    private boolean containsSubstance(String substance) {
+        return substanceList.containsKey(substance);
+    }
     public double getQuantity(String substance) {
-        if(!substanceList.containsKey(substance)) {
+        if(!containsSubstance(substance)) {
             throw new IllegalArgumentException("Substance not found: " + substance);
         }
         return substanceList.get(substance);
     }
     public void add(String substance, double qty) {
-        if(!substanceList.containsKey(substance) || qty < 0) {
+        if(!containsSubstance(substance) || qty < 0) {
             throw new IllegalArgumentException("Unknown substance (" + substance + ") or negative quantity (" + qty + ")");
         }
         substanceList.put(substance, qty);

@@ -4,16 +4,21 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LaboratoryTest {
+    public Laboratory newLaboratory(String... substances) {
+        return new Laboratory(substances);
+    }
+    public Laboratory newLaboratoryAB() {
+        return new Laboratory(new String[]{"A", "B"});
+    }
+
     @Test void initWithEmptySubstanceListThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
-            new Laboratory(new String[]{})
+            newLaboratory()
         );
     }
 
     @Test void initWithRegularSubstanceList() {
-        var test = new Laboratory(new String[]{
-            "A", "B"
-        });
+        var test = newLaboratoryAB();
         assertEquals(0, test.getQuantity("A"));
         assertEquals(0, test.getQuantity("B"));
         assertThrows(IllegalArgumentException.class, () -> test.getQuantity("C"));
@@ -27,58 +32,48 @@ class LaboratoryTest {
 
     @Test void initWithDuplicateSubstanceListThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
-            new Laboratory(new String[]{
-                "A", "B", "A"
-            })
+            newLaboratory("A", "B", "A")
         );
     }
 
     @Test void initWithListHavingEmptyStringSubstanceThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
-            new Laboratory(new String[]{
-                "A", ""
-            })
+            newLaboratory("A", "")
         );
     }
 
     @Test void initWithListHavingNullStringSubstanceThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
-            new Laboratory(new String[]{
-                "A", null
-            })
+            newLaboratory("A", null)
         );
     }
 
     @Test void addUnknownSubstanceThrowsIllegalArgumentException() {
-        var test = new Laboratory(new String[]{
-            "A", "B"
-        });
+        var test = newLaboratoryAB();
+        
         assertThrows(IllegalArgumentException.class, () ->
             test.add("C", .5)
         );
     }
 
     @Test void addKnownSubstanceWithNegativeQuantityThrowsIllegaleArgumentException() {
-        var test = new Laboratory(new String[]{
-            "A", "B"
-        });
+        var test = newLaboratoryAB();
+        
         assertThrows(IllegalArgumentException.class, () ->
             test.add("A", -0.5)
         );
     }
 
     @Test void addZeroQuantityDoesNotThrow() {
-        var test = new Laboratory(new String[]{
-            "A", "B"
-        });
+        var test = newLaboratoryAB();
+
         test.add("A", 0);
         assertEquals(0, test.getQuantity("A"));
     }
 
     @Test void addQuantityOnce() {
-        var test = new Laboratory(new String[]{
-            "A", "B"
-        });
+        var test = newLaboratoryAB();
+        
         test.add("A", 2);
         assertEquals(2.0, test.getQuantity("A"));
     }

@@ -19,8 +19,8 @@ class LaboratoryTest {
 
     @Test void initWithRegularSubstanceList() {
         var test = newLaboratoryAB();
-        assertEquals(0, test.getQuantity("A"));
-        assertEquals(0, test.getQuantity("B"));
+        assertEquals(0, test.getQuantity("A"), .0001);
+        assertEquals(0, test.getQuantity("B"), .0001);
         assertThrows(IllegalArgumentException.class, () -> test.getQuantity("C"));
     }
 
@@ -68,14 +68,31 @@ class LaboratoryTest {
         var test = newLaboratoryAB();
 
         test.add("A", 0);
-        assertEquals(0, test.getQuantity("A"));
+        assertEquals(0, test.getQuantity("A"), .0001);
     }
 
     @Test void addQuantityOnce() {
         var test = newLaboratoryAB();
-        
+
         test.add("A", 2);
-        assertEquals(2.0, test.getQuantity("A"));
+        assertEquals(2.0, test.getQuantity("A"), .0001);
     }
 
+    @Test void addQuantityMultipleTimes() {
+        var test = newLaboratoryAB();
+
+        test.add("A", 2);
+        test.add("A", 3);
+        assertEquals(5.0, test.getQuantity("A"), .0001);
+        assertEquals(0.0, test.getQuantity("B"), .0001);
+    }
+
+    @Test void addQuantityMultipleSubstance() {
+        var test = newLaboratoryAB();
+
+        test.add("A", 2.0);
+        test.add("B", 0.5);
+        assertEquals(2.0, test.getQuantity("A"), .0001);
+        assertEquals(0.5, test.getQuantity("B"), .0001);
+    }
 }

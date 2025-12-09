@@ -19,4 +19,10 @@ class LaboratoryTest {
         assertThrows(IllegalArgumentException.class, () -> test.getQuantity("C"));
     }
 
+    @Test void initWithNullSubstanceListThrowsNullReferenceException() {
+        assertThrows(NullPointerException.class, 
+            () -> new Laboratory(null)
+        );
+    }
+
 }

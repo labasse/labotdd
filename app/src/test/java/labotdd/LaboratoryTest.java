@@ -9,4 +9,14 @@ class LaboratoryTest {
             new Laboratory(new String[]{})
         );
     }
+
+    @Test void initWithRegularSubstanceList() {
+        var test = new Laboratory(new String[]{
+            "A", "B"
+        });
+        assertEquals(0, test.getQuantity("A"));
+        assertEquals(0, test.getQuantity("B"));
+        assertThrows(IllegalArgumentException.class, () -> test.getQuantity("C"));
+    }
+
 }

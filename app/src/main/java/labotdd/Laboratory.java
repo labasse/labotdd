@@ -1,7 +1,7 @@
 package labotdd;
 
-import java.util.Set;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Laboratory {
     public Laboratory(String[] substances) {
@@ -9,20 +9,23 @@ public class Laboratory {
             throw new IllegalArgumentException("Substance list cannot be empty");
         }
         for(var s : substances) {
-            if(s == null || s.isEmpty() || substanceList.contains(s)) {
+            if(s == null || s.isEmpty() || substanceList.containsKey(s)) {
                 throw new IllegalArgumentException("Substance cannot be null, empty or duplicate: " + s);
             }
-            substanceList.add(s);
+            substanceList.put(s, 0.0);
         }
     }
     public double getQuantity(String substance) {
-        if(!substanceList.contains(substance)) {
+        if(!substanceList.containsKey(substance)) {
             throw new IllegalArgumentException("Substance not found: " + substance);
         }
-        return 0;
+        return substanceList.get(substance);
     }
     public void add(String substance, double qty) {
-        throw new IllegalArgumentException("Unknown substance (" + substance + ") or negative quantity (" + qty + ")");
+        if(!substanceList.containsKey(substance) || qty < 0) {
+            throw new IllegalArgumentException("Unknown substance (" + substance + ") or negative quantity (" + qty + ")");
+        }
+        substanceList.put(substance, qty);
     }
-    private Set<String> substanceList = new HashSet<>();
+    private Map<String, Double> substanceList = new HashMap<>();
 }

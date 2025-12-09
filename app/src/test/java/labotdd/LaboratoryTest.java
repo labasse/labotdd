@@ -80,7 +80,7 @@ class LaboratoryTest {
             "A", "B"
         });
         test.add("A", 2);
-        assertEquals(2, test.getQuantity("A"));
+        assertEquals(2.0, test.getQuantity("A"));
     }
 
 }

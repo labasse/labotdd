@@ -66,4 +66,21 @@ class LaboratoryTest {
             test.add("A", -0.5)
         );
     }
+
+    @Test void addZeroQuantityDoesNotThrow() {
+        var test = new Laboratory(new String[]{
+            "A", "B"
+        });
+        test.add("A", 0);
+        assertEquals(0, test.getQuantity("A"));
+    }
+
+    @Test void addQuantityOnce() {
+        var test = new Laboratory(new String[]{
+            "A", "B"
+        });
+        test.add("A", 2);
+        assertEquals(2, test.getQuantity("A"));
+    }
+
 }

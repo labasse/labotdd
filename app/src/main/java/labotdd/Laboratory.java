@@ -8,6 +8,9 @@ public class Laboratory {
     public record Reagent(String name, double quantity) {}
 
     public Laboratory(String[] substances, Map<String, List<Reagent>> reactions) {
+        if(reactions == null) {
+            throw new NullPointerException("Reactions map cannot be null");
+        }
         if(substances.length == 0) {
             throw new IllegalArgumentException("Substance list cannot be empty");
         }

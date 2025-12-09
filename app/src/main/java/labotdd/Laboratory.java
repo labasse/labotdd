@@ -25,8 +25,8 @@ public class Laboratory {
         return substanceList.get(substance);
     }
     public void add(String substance, double qty) {
-        if(!containsSubstance(substance) || qty < 0) {
-            throw new IllegalArgumentException("Unknown substance (" + substance + ") or negative quantity (" + qty + ")");
+        if(qty < 0) {
+            throw new IllegalArgumentException("Negative quantity");
         }
         substanceList.put(substance, getQuantity(substance) + qty);
     }

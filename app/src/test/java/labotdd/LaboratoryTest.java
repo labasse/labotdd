@@ -10,6 +10,11 @@ class LaboratoryTest {
     public Laboratory newLaboratoryAB() {
         return new Laboratory(new String[]{"A", "B"});
     }
+    public void asserQuantityAB(Laboratory lab, double expectedQtyForA, double expectedQtyForB) {
+        assertEquals(expectedQtyForA, lab.getQuantity("A"), .0001);
+        assertEquals(expectedQtyForB, lab.getQuantity("B"), .0001);
+    }
+
 
     @Test void initWithEmptySubstanceListThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
@@ -19,8 +24,8 @@ class LaboratoryTest {
 
     @Test void initWithRegularSubstanceList() {
         var test = newLaboratoryAB();
-        assertEquals(0, test.getQuantity("A"), .0001);
-        assertEquals(0, test.getQuantity("B"), .0001);
+
+        asserQuantityAB(test, 0.0, 0.0);
         assertThrows(IllegalArgumentException.class, () -> test.getQuantity("C"));
     }
 
@@ -83,16 +88,14 @@ class LaboratoryTest {
 
         test.add("A", 2);
         test.add("A", 3);
-        assertEquals(5.0, test.getQuantity("A"), .0001);
-        assertEquals(0.0, test.getQuantity("B"), .0001);
+        asserQuantityAB(test, 5.0, 0.0);
     }
 
     @Test void addQuantityMultipleSubstance() {
         var test = newLaboratoryAB();
-
+        
         test.add("A", 2.0);
         test.add("B", 0.5);
-        assertEquals(2.0, test.getQuantity("A"), .0001);
-        assertEquals(0.5, test.getQuantity("B"), .0001);
+        asserQuantityAB(test, 2.0, 0.5);
     }
 }

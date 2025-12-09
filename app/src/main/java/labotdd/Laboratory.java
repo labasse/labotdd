@@ -2,12 +2,15 @@ package labotdd;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.jspecify.annotations.NonNull;
+
 import java.util.List;
 
 public class Laboratory {
     public record Reagent(String name, double quantity) {}
 
-    public Laboratory(String[] substances, Map<String, List<Reagent>> reactions) {
+    public Laboratory(String[] substances, Map<@NonNull String, List<@NonNull Reagent>> reactions) {
         if(reactions == null) {
             throw new NullPointerException("Reactions map cannot be null");
         }

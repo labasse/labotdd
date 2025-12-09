@@ -1,6 +1,8 @@
 package labotdd;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,6 +53,24 @@ class LaboratoryTest {
     @Test void initWithListHavingNullStringSubstanceThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
             newLaboratory("A", null)
+        );
+    }
+
+    @Test void initWithEmptyReactionName()
+    {
+        assertThrows(IllegalArgumentException.class, () ->
+            new Laboratory(new String[]{"A", "B"}, Map.of(
+                "", List.of(new Laboratory.Reagent("A", 1.0))
+            ))
+        );
+    }
+
+    @Test void initWithEmptyReagentList()
+    {
+        assertThrows(IllegalArgumentException.class, () ->
+            new Laboratory(new String[]{"A", "B"}, Map.of(
+                "C", List.of()
+            ))
         );
     }
 

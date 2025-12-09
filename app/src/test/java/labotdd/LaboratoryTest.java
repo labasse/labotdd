@@ -22,7 +22,7 @@ class LaboratoryTest {
             List<Laboratory.@NonNull Reagent> reagents = new java.util.ArrayList<>();
             String[] 
                 parts = reaction.split(" = "), 
-                reagentsParts = parts.length < 2 ? new String[]{""} : parts[1].split(" + ");
+                reagentsParts = parts.length < 2 ? new String[]{""} : parts[1].split(" \\+ ");
             String product = parts[0];
 
             for (String reagentPart : reagentsParts) {

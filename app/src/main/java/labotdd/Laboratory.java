@@ -60,9 +60,15 @@ public class Laboratory {
         if(!reactionMap.containsKey(product) || qty <= 0) {
             throw new IllegalArgumentException("product must be known and quantity must be positive or zero");
         }
-        return 0.0;
+        for(var reagent : reactionMap.get(product)) {
+            substanceList.put(
+                reagent.name, 
+                getQuantity(reagent.name) - reagent.quantity * qty
+            );}
+        substanceList.put(product, qty);
+        return qty;
     }
 
-    private Map<String, Double> substanceList = new HashMap<>();
-    private Map<@NonNull String, List<@NonNull Reagent>> reactionMap = new HashMap<>();
+    private final Map<String, Double> substanceList = new HashMap<>();
+    private final Map<@NonNull String, List<@NonNull Reagent>> reactionMap = new HashMap<>();
 }

@@ -262,4 +262,34 @@ class LaboratoryTest {
             2.0, 0.0
         );
     }
+
+    @Test void makeProductWithStoredQtyAndSufficientReagents() {
+        var test = newLaboratoryAB("C = 2 A + B", "D = A");
+
+        test.add("A", 5.2);
+        test.add("B", 4.1);
+        test.add("C", 1.3);
+        
+        double made = test.make("C", 2.0);
+        assertEquals(2.0, made, .0001);
+        assertQuantityABCD(test,
+            1.2, 2.1,
+            3.3, 0.0
+        );
+    }
+
+    @Test void makeProductWithInsufficientReagents() {
+        var test = newLaboratoryAB("C = 2 A + B", "D = A");
+
+        test.add("A", 3.5);
+        test.add("B", 1.2);
+        test.add("C", 0.3);
+    
+        double made = test.make("C", 2.0);
+        assertEquals(1.2, made, .0001);
+        assertQuantityABCD(test,
+            1.1, 0.0,
+            1.5, 0.0
+        );
+    }
 }

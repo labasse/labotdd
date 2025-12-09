@@ -64,7 +64,8 @@ public class Laboratory {
             substanceList.put(
                 reagent.name, 
                 getQuantity(reagent.name) - reagent.quantity * qty
-            );}
+            );
+        }
         substanceList.put(product, qty);
         return qty;
     }

@@ -3,6 +3,8 @@ package labotdd;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,12 +12,48 @@ class LaboratoryTest {
     public Laboratory newLaboratory(String... substances) {
         return new Laboratory(substances, new HashMap<>());
     }
-    public Laboratory newLaboratoryAB() {
-        return newLaboratory("A", "B");
+    public Laboratory newLaboratoryAB(String... reactions) {
+        return new Laboratory(new String[]{"A", "B"}, parseReactions(reactions));
     }
-    public void asserQuantityAB(Laboratory lab, double expectedQtyForA, double expectedQtyForB) {
+    public Map<@NonNull String, List<Laboratory.@NonNull Reagent>> parseReactions(String... reactions) {
+        Map<@NonNull String, List<Laboratory.@NonNull Reagent>> reactionMap = new HashMap<>();
+
+        for (String reaction : reactions) {
+            List<Laboratory.@NonNull Reagent> reagents = new java.util.ArrayList<>();
+            String[] 
+                parts = reaction.split(" = "), 
+                reagentsParts = parts.length < 2 ? new String[]{""} : parts[1].split(" + ");
+            String product = parts[0];
+
+            for (String reagentPart : reagentsParts) {
+                String[] info = reagentPart.split(" ");
+                String name;
+                double quantity;
+                if(info.length < 2) {
+                    name = info[0];
+                    quantity = 1.0;
+                }
+                else {
+                    name = info[1];
+                    quantity = Double.parseDouble(info[0]);
+                }
+                reagents.add(new Laboratory.Reagent(name, quantity));
+            }
+            reactionMap.put(product+"", reagents);
+        }
+        return reactionMap;
+    }
+
+    public void assertQuantityAB(Laboratory lab, double expectedQtyForA, double expectedQtyForB) {
         assertEquals(expectedQtyForA, lab.getQuantity("A"), .0001);
         assertEquals(expectedQtyForB, lab.getQuantity("B"), .0001);
+    }
+    public void assertQuantityABCD(Laboratory lab, 
+        double expectedQtyForA, double expectedQtyForB, 
+        double expectedQtyForC, double expectedQtyForD) {
+        assertQuantityAB(lab, expectedQtyForA, expectedQtyForB);
+        assertEquals(expectedQtyForC, lab.getQuantity("C"), .0001);
+        assertEquals(expectedQtyForD, lab.getQuantity("D"), .0001);
     }
 
 
@@ -28,7 +66,7 @@ class LaboratoryTest {
     @Test void initWithRegularSubstanceList() {
         var test = newLaboratoryAB();
 
-        asserQuantityAB(test, 0.0, 0.0);
+        assertQuantityAB(test, 0.0, 0.0);
         assertThrows(IllegalArgumentException.class, () -> test.getQuantity("C"));
     }
 
@@ -66,9 +104,7 @@ class LaboratoryTest {
 
     @Test void initWithEmptyReagentList() {
         assertThrows(IllegalArgumentException.class, () ->
-            new Laboratory(new String[]{"A", "B"}, Map.of(
-                "C", List.of()
-            ))
+            newLaboratoryAB("C = ")
         );
     }
 
@@ -80,71 +116,50 @@ class LaboratoryTest {
 
     @Test void initWithProductInItsOwnReagentListThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
-            new Laboratory(new String[]{"A", "B"}, Map.of(
-                "C", List.of(new Laboratory.Reagent("C", 1.0), new Laboratory.Reagent("A", 2.0))
-            ))
+            newLaboratoryAB("C = C + 2 A")
         );
     }
 
     @Test void initWithNegativeQuantityInReagentThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
-            new Laboratory(new String[]{"A", "B"}, Map.of(
-                "C", List.of(new Laboratory.Reagent("A", -1.0))
-            ))
+            newLaboratoryAB("C = -1 A")
         );
     }
 
     @Test void initWithZeroQuantityInReagentThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
-            new Laboratory(new String[]{"A", "B"}, Map.of(
-                "C", List.of(new Laboratory.Reagent("A", 0.0))
-            ))
+            newLaboratoryAB("C = 0 A")
         );
     }
 
     @Test void initWithProductNamedLikeASubstanceThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
-            new Laboratory(new String[]{"A", "B"}, Map.of(
-                "A", List.of(new Laboratory.Reagent("B", 1.0))
-            ))
+            newLaboratoryAB("A = B")
         );
     }
 
     @Test void initWithNotExistingSubstanceThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
-            new Laboratory(new String[]{"A", "B"}, Map.of(
-                "A", List.of(new Laboratory.Reagent("C", 1.0))
-            ))
+            newLaboratoryAB("A = X")
         );
     }
 
     @Test void initRegularReactions() {
-        var test = new Laboratory(
-            new String[]{"A", "B"},
-            Map.of(
-                "C", List.of(new Laboratory.Reagent("A", 2.0), new Laboratory.Reagent("B", 1.0)),
-                "D", List.of(new Laboratory.Reagent("A", 1.0) )
-            )
+        var test = newLaboratoryAB("C = 2 A + B", "D = A");
+
+        assertQuantityABCD(test, 
+            0.0, 0.0,
+            0.0, 0.0
         );
-        assertEquals(0.0, test.getQuantity("A"), .0001);
-        assertEquals(0.0, test.getQuantity("B"), .0001);
-        assertEquals(0.0, test.getQuantity("C"), .0001);
-        assertEquals(0.0, test.getQuantity("D"), .0001);
     }
 
     @Test void initWithProductAsReagentOfOtherProduct() {
-        var test = new Laboratory(
-            new String[]{"A", "B"},
-            Map.of(
-                "C", List.of(new Laboratory.Reagent("A", 1.0)),
-                "D", List.of(new Laboratory.Reagent("C", 2.0))
-            )
-        );
-        assertEquals(0.0, test.getQuantity("A"), .0001);
-        assertEquals(0.0, test.getQuantity("B"), .0001);
-        assertEquals(0.0, test.getQuantity("C"), .0001);
-        assertEquals(0.0, test.getQuantity("D"), .0001);
-    }
+        var test = newLaboratoryAB("C = A", "D = 2 C");
+        
+        assertQuantityABCD(test, 
+            0.0, 0.0,
+            0.0, 0.0
+        );}
 
     @Test void addUnknownSubstanceThrowsIllegalArgumentException() {
         var test = newLaboratoryAB();
@@ -166,14 +181,14 @@ class LaboratoryTest {
         var test = newLaboratoryAB();
 
         test.add("A", 0);
-        assertEquals(0, test.getQuantity("A"), .0001);
+        assertQuantityAB(test, 0.0, 0.0);
     }
 
     @Test void addQuantityOnce() {
         var test = newLaboratoryAB();
 
         test.add("A", 2);
-        assertEquals(2.0, test.getQuantity("A"), .0001);
+        assertQuantityAB(test, 2.0, 0.0);
     }
 
     @Test void addQuantityMultipleTimes() {
@@ -181,7 +196,7 @@ class LaboratoryTest {
 
         test.add("A", 2);
         test.add("A", 3);
-        asserQuantityAB(test, 5.0, 0.0);
+        assertQuantityAB(test, 5.0, 0.0);
     }
 
     @Test void addQuantityMultipleSubstance() {
@@ -189,20 +204,16 @@ class LaboratoryTest {
         
         test.add("A", 2.0);
         test.add("B", 0.5);
-        asserQuantityAB(test, 2.0, 0.5);
+        assertQuantityAB(test, 2.0, 0.5);
     }
 
     @Test void addProductOnce() {
-        var test = new Laboratory(
-            new String[]{"A", "B"},
-            Map.of(
-                "C", List.of(new Laboratory.Reagent("A", 2.0), new Laboratory.Reagent("B", 1.0)),
-                "D", List.of(new Laboratory.Reagent("A", 1.0) )
-            )
-        );
+        var test = newLaboratoryAB("C = 2 A + B", "D = A");
 
         test.add("C", 4.0);
-        asserQuantityAB(test, .0, .0);
-        assertEquals(4.0, test.getQuantity("C"), .0001);
+        assertQuantityABCD(test,
+            0.0, 0.0, 
+            4.0, 0.0
+        );
     }
 }

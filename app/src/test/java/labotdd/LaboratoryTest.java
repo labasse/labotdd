@@ -32,4 +32,22 @@ class LaboratoryTest {
             })
         );
     }
+
+    @Test void addUnknownSubstanceThrowsIllegalArgumentException() {
+        var test = new Laboratory(new String[]{
+            "A", "B"
+        });
+        assertThrows(IllegalArgumentException.class, () ->
+            test.add("C", .5)
+        );
+    }
+
+    @Test void addKnownSubstanceWithNegativeQuantityThrowsIllegaleArgumentException() {
+        var test = new Laboratory(new String[]{
+            "A", "B"
+        });
+        assertThrows(IllegalArgumentException.class, () ->
+            test.add("A", -0.5)
+        );
+    }
 }

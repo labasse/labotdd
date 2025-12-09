@@ -21,5 +21,8 @@ public class Laboratory {
         }
         return 0;
     }
+    public void add(String substance, double qty) {
+        
+    }
     private Set<String> substanceList = new HashSet<>();
 }

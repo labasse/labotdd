@@ -30,6 +30,14 @@ public class Laboratory {
             if(reagents.isEmpty()) {
                 throw new IllegalArgumentException("Reagent list cannot be empty for reaction: " + product);
             }
+            for(var r : reagents) {
+                if(r.name.equals(product)) {
+                    throw new IllegalArgumentException("Reaction cannot have its product as reagent");
+                }
+                if(r.quantity <= 0) {
+                    throw new IllegalArgumentException("Reagent quantity must be positive for substance: " + r.name);
+                }
+            }
         });
     }
     private boolean containsSubstance(String substance) {

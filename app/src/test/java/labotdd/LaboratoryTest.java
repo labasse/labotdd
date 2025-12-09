@@ -78,6 +78,30 @@ class LaboratoryTest {
         );
     }
 
+    @Test void initWithProductInItsOwnReagentListThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () ->
+            new Laboratory(new String[]{"A", "B"}, Map.of(
+                "C", List.of(new Laboratory.Reagent("C", 1.0), new Laboratory.Reagent("A", 2.0))
+            ))
+        );
+    }
+
+    @Test void initWithNegativeQuantityInReagentThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () ->
+            new Laboratory(new String[]{"A", "B"}, Map.of(
+                "C", List.of(new Laboratory.Reagent("A", -1.0))
+            ))
+        );
+    }
+
+    @Test void initWithZeroQuantityInReagentThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () ->
+            new Laboratory(new String[]{"A", "B"}, Map.of(
+                "C", List.of(new Laboratory.Reagent("A", 0.0))
+            ))
+        );
+    }
+
     @Test void addUnknownSubstanceThrowsIllegalArgumentException() {
         var test = newLaboratoryAB();
         

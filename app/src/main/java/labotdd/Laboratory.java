@@ -23,6 +23,14 @@ public class Laboratory {
             }
             substanceList.put(s, 0.0);
         }
+        reactions.forEach((product, reagents) -> {
+            if(product.isEmpty()) {
+                throw new IllegalArgumentException("Reaction name cannot be empty");
+            }
+            if(reagents.isEmpty()) {
+                throw new IllegalArgumentException("Reagent list cannot be empty for reaction: " + product);
+            }
+        });
     }
     private boolean containsSubstance(String substance) {
         return substanceList.containsKey(substance);

@@ -56,8 +56,7 @@ class LaboratoryTest {
         );
     }
 
-    @Test void initWithEmptyReactionName()
-    {
+    @Test void initWithEmptyReactionName() {
         assertThrows(IllegalArgumentException.class, () ->
             new Laboratory(new String[]{"A", "B"}, Map.of(
                 "", List.of(new Laboratory.Reagent("A", 1.0))
@@ -65,8 +64,7 @@ class LaboratoryTest {
         );
     }
 
-    @Test void initWithEmptyReagentList()
-    {
+    @Test void initWithEmptyReagentList() {
         assertThrows(IllegalArgumentException.class, () ->
             new Laboratory(new String[]{"A", "B"}, Map.of(
                 "C", List.of()

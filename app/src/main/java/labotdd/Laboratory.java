@@ -28,7 +28,7 @@ public class Laboratory {
         if(!containsSubstance(substance) || qty < 0) {
             throw new IllegalArgumentException("Unknown substance (" + substance + ") or negative quantity (" + qty + ")");
         }
-        substanceList.put(substance, qty);
+        substanceList.put(substance, getQuantity(substance) + qty);
     }
     private Map<String, Double> substanceList = new HashMap<>();
 }

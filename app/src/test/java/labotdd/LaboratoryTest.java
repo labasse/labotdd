@@ -191,4 +191,18 @@ class LaboratoryTest {
         test.add("B", 0.5);
         asserQuantityAB(test, 2.0, 0.5);
     }
+
+    @Test void addProductOnce() {
+        var test = new Laboratory(
+            new String[]{"A", "B"},
+            Map.of(
+                "C", List.of(new Laboratory.Reagent("A", 2.0), new Laboratory.Reagent("B", 1.0)),
+                "D", List.of(new Laboratory.Reagent("A", 1.0) )
+            )
+        );
+
+        test.add("C", 4.0);
+        asserQuantityAB(test, .0, .0);
+        assertEquals(4.0, test.getQuantity("C"), .0001);
+    }
 }

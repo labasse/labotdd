@@ -1,7 +1,7 @@
 package labotdd;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 public class Laboratory {
     public Laboratory(String[] substances) {
@@ -9,9 +9,6 @@ public class Laboratory {
             throw new IllegalArgumentException("Substance list cannot be empty");
         }
         for(var s : substances) {
-            if(substanceList.contains(s)) {
-                throw new IllegalArgumentException("Duplicate substance: " + s);
-            }
             substanceList.add(s);
         }
     }
@@ -21,5 +18,5 @@ public class Laboratory {
         }
         return 0;
     }
-    private List<String> substanceList = new ArrayList<>();
+    private Set<String> substanceList = new HashSet<>();
 }

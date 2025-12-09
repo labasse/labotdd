@@ -294,4 +294,18 @@ class LaboratoryTest {
             1.5, 0.0
         );
     }
+
+    @Test void makeUsingStoredProductAsReagent() {
+        var test = newLaboratoryAB("C = A", "D = 2 C + A");
+
+        addABC(test, 5.0, 0.0, 5.0);
+    
+        double made = test.make("D", 2.0);
+
+        assertEquals(2, made, .0001);
+        assertQuantityABCD(test,
+            3.0, 0.0,
+            1.0, 2.0
+        );
+    }
 }

@@ -308,4 +308,18 @@ class LaboratoryTest {
             1.0, 2.0
         );
     }
+
+    @Test void makeUsingRecursiveReactionForReagentProduct() {
+        var test = newLaboratoryAB("C = A", "D = 2 C + A");
+
+        addABC(test, 6.0, 0.0, 1.0);
+    
+        double made = test.make("D", 2.0);
+
+        assertEquals(2, made, .0001);
+        assertQuantityABCD(test,
+            1.0, 0.0,
+            0.0, 2.0
+        );
+    }
 }

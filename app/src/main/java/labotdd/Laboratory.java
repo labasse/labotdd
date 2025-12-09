@@ -37,6 +37,7 @@ public class Laboratory {
                     );
                 }
             }
+            substanceList.put(product, 0.0);
         });
     }
     private boolean containsSubstance(String substance) {

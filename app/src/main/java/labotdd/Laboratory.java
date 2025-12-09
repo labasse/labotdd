@@ -9,11 +9,8 @@ public class Laboratory {
             throw new IllegalArgumentException("Substance list cannot be empty");
         }
         for(var s : substances) {
-            if(s == null || s.isEmpty()) {
-                throw new IllegalArgumentException("Substance cannot be null or empty");
-            }
-            else if(substanceList.contains(s)) {
-                throw new IllegalArgumentException("Duplicate substance: " + s);
+            if(s == null || s.isEmpty() || substanceList.contains(s)) {
+                throw new IllegalArgumentException("Substance cannot be null, empty or duplicate: " + s);
             }
             substanceList.add(s);
         }

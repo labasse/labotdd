@@ -64,7 +64,14 @@ public class Laboratory {
             throw new IllegalArgumentException("product must be known and quantity must be positive or zero");
         }
         var make = Math.min(qty, reactionMap.get(product).stream()
-            .mapToDouble(r -> getQuantity(r.name)/r.quantity)
+            .mapToDouble(r -> {
+                var possible = getQuantity(r.name)/r.quantity;
+                
+                if(possible<qty && reactionMap.containsKey(r.name)) {
+                    possible += make(r.name, (qty - possible) * r.quantity)/r.quantity;
+                } 
+                return possible;
+            })
             .min()
             .orElse(0));
         

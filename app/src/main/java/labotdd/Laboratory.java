@@ -37,6 +37,7 @@ public class Laboratory {
                     );
                 }
             }
+            reactionMap.put(product, List.copyOf(reagents));
             substanceList.put(product, 0.0);
         });
     }
@@ -56,8 +57,12 @@ public class Laboratory {
         substanceList.put(substance, getQuantity(substance) + qty);
     }
     public double make(@NonNull String product, double qty) {
+        if(!reactionMap.containsKey(product) || qty <= 0) {
+            throw new IllegalArgumentException("product must be known and quantity must be positive or zero");
+        }
         return 0.0;
     }
 
     private Map<String, Double> substanceList = new HashMap<>();
+    private Map<@NonNull String, List<@NonNull Reagent>> reactionMap = new HashMap<>();
 }

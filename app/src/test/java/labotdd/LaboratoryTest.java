@@ -118,6 +118,33 @@ class LaboratoryTest {
         );
     }
 
+    @Test void initRegularReactions() {
+        var test = new Laboratory(
+            new String[]{"A", "B"},
+            Map.of(
+                "C", List.of(new Laboratory.Reagent("A", 2.0), new Laboratory.Reagent("B", 1.0)),
+                "D", List.of(new Laboratory.Reagent("A", 1.0) )
+            )
+        );
+        assertEquals(0.0, test.getQuantity("A"), .0001);
+        assertEquals(0.0, test.getQuantity("B"), .0001);
+        assertEquals(0.0, test.getQuantity("C"), .0001);
+        assertEquals(0.0, test.getQuantity("D"), .0001);
+    }
+
+    @Test void initWithProductAsReagentOfOtherProduct() {
+        var test = new Laboratory(
+            new String[]{"A", "B"},
+            Map.of(
+                "C", List.of(new Laboratory.Reagent("A", 1.0)),
+                "D", List.of(new Laboratory.Reagent("C", 2.0))
+            )
+        );
+        assertEquals(0.0, test.getQuantity("A"), .0001);
+        assertEquals(0.0, test.getQuantity("B"), .0001);
+        assertEquals(0.0, test.getQuantity("C"), .0001);
+        assertEquals(0.0, test.getQuantity("D"), .0001);
+    }
 
     @Test void addUnknownSubstanceThrowsIllegalArgumentException() {
         var test = newLaboratoryAB();

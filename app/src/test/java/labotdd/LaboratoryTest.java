@@ -248,4 +248,18 @@ class LaboratoryTest {
             test.make("C", -1.0)
         );
     }
+
+    @Test void makeProductWithSufficientReagents() {
+        var test = newLaboratoryAB("C = 2 A + B", "D = A");
+
+        test.add("A", 5.2);
+        test.add("B", 4.1);
+    
+        double made = test.make("C", 2.0);
+        assertEquals(2.0, made, .0001);
+        assertQuantityABCD(test,
+            1.2, 2.1,
+            2.0, 0.0
+        );
+    }
 }

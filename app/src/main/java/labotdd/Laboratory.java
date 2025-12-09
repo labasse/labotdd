@@ -54,29 +54,24 @@ public class Laboratory {
         if(qty < 0) {
             throw new IllegalArgumentException("Negative quantity");
         }
+        addNoCheck(substance, qty);
+    }
+    public void addNoCheck(String substance, double qty) {
         substanceList.put(substance, getQuantity(substance) + qty);
     }
     public double make(@NonNull String product, double qty) {
         if(!reactionMap.containsKey(product) || qty <= 0) {
             throw new IllegalArgumentException("product must be known and quantity must be positive or zero");
         }
-        var make = qty;
-
-        for(var reagent : reactionMap.get(product)) {
-            if(getQuantity(reagent.name) < reagent.quantity * make) {
-                double possibleQty = getQuantity(reagent.name) / reagent.quantity;
-                if(possibleQty < make) {
-                    make = possibleQty;
-                }
-            }
-        }
-        for(var reagent : reactionMap.get(product)) {
-            substanceList.put(
-                reagent.name, 
-                getQuantity(reagent.name) - reagent.quantity * make
-            );
-        }
-        substanceList.put(product, make + getQuantity(product));
+        var make = Math.min(qty, reactionMap.get(product).stream()
+            .mapToDouble(r -> getQuantity(r.name)/r.quantity)
+            .min()
+            .orElse(0));
+        
+        reactionMap.get(product).forEach(
+            r -> addNoCheck(r.name, - r.quantity * make)
+        );
+        addNoCheck(product, make);
         return make;
     }
 

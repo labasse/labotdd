@@ -44,6 +44,12 @@ class LaboratoryTest {
         return reactionMap;
     }
 
+    public void addABC(Laboratory lab, double qtyA, double qtyB, double qtyC) {
+        lab.add("A", qtyA);
+        lab.add("B", qtyB);
+        lab.add("C", qtyC);
+    }
+
     public void assertQuantityAB(Laboratory lab, double expectedQtyForA, double expectedQtyForB) {
         assertEquals(expectedQtyForA, lab.getQuantity("A"), .0001);
         assertEquals(expectedQtyForB, lab.getQuantity("B"), .0001);
@@ -201,7 +207,7 @@ class LaboratoryTest {
 
     @Test void addQuantityMultipleSubstance() {
         var test = newLaboratoryAB();
-        
+
         test.add("A", 2.0);
         test.add("B", 0.5);
         assertQuantityAB(test, 2.0, 0.5);
@@ -252,8 +258,7 @@ class LaboratoryTest {
     @Test void makeProductWithSufficientReagents() {
         var test = newLaboratoryAB("C = 2 A + B", "D = A");
 
-        test.add("A", 5.2);
-        test.add("B", 4.1);
+        addABC(test, 5.2, 4.1, 0);
     
         double made = test.make("C", 2.0);
         assertEquals(2.0, made, .0001);
@@ -266,11 +271,10 @@ class LaboratoryTest {
     @Test void makeProductWithStoredQtyAndSufficientReagents() {
         var test = newLaboratoryAB("C = 2 A + B", "D = A");
 
-        test.add("A", 5.2);
-        test.add("B", 4.1);
-        test.add("C", 1.3);
-        
+        addABC(test, 5.2, 4.1, 1.3);
+
         double made = test.make("C", 2.0);
+        
         assertEquals(2.0, made, .0001);
         assertQuantityABCD(test,
             1.2, 2.1,
@@ -281,9 +285,7 @@ class LaboratoryTest {
     @Test void makeProductWithInsufficientReagents() {
         var test = newLaboratoryAB("C = 2 A + B", "D = A");
 
-        test.add("A", 3.5);
-        test.add("B", 1.2);
-        test.add("C", 0.3);
+        addABC(test, 3.5, 1.2, 0.3);
     
         double made = test.make("C", 2.0);
         assertEquals(1.2, made, .0001);

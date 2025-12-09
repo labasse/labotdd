@@ -24,13 +24,15 @@ public class Laboratory {
             substanceList.put(s, 0.0);
         }
         reactions.forEach((product, reagents) -> {
-            if(product.isEmpty() || reagents.isEmpty()) {
-                throw new IllegalArgumentException("Reaction name or reagent list cannot be empty");
+            if(product.isEmpty() || reagents.isEmpty() || substanceList.containsKey(product)) {
+                throw new IllegalArgumentException(
+                    "Reaction name or reagent list cannot be empty or product cannot be a known substance: " + product
+                );
             }
             for(var r : reagents) {
-                if(r.name.equals(product) || r.quantity <= 0) {
+                if(r.name.equals(product) || !substanceList.containsKey(r.name) || r.quantity <= 0) {
                     throw new IllegalArgumentException(
-                        "Reaction cannot have its product as reagent " + r.name + 
+                        "Reaction cannot have its product or unknown substance as reagent " + r.name + 
                         "or non-positive reagent quantity" + r.name + ", " + r.quantity
                     );
                 }

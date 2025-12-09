@@ -55,5 +55,9 @@ public class Laboratory {
         }
         substanceList.put(substance, getQuantity(substance) + qty);
     }
+    public double make(@NonNull String product, double qty) {
+        return 0.0;
+    }
+
     private Map<String, Double> substanceList = new HashMap<>();
 }

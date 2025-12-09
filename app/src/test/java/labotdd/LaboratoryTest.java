@@ -216,4 +216,36 @@ class LaboratoryTest {
             4.0, 0.0
         );
     }
+
+    @Test void makeUnknownProductThrowsIllegalArgumentException() {
+        var test = newLaboratoryAB();
+
+        assertThrows(IllegalArgumentException.class, () ->
+            test.make("C", 1.0)
+        );
+    }
+
+    @Test void makeSubstanceThrowsIllegalArgumentException() {
+        var test = newLaboratoryAB();
+
+        assertThrows(IllegalArgumentException.class, () ->
+            test.make("A", 1.0)
+        );
+    }
+
+    @Test void makeProductWithZeroQuantityThrowsIllegalArgumentException() {
+        var test = newLaboratoryAB("C = 2 A + B", "D = A");
+
+        assertThrows(IllegalArgumentException.class, () ->
+            test.make("C", 0.0)
+        );
+    }
+
+    @Test void makeProductWithNegativeQuantityThrowsIllegalArgumentException() {
+        var test = newLaboratoryAB("C = 2 A + B", "D = A");
+
+        assertThrows(IllegalArgumentException.class, () ->
+            test.make("C", -1.0)
+        );
+    }
 }

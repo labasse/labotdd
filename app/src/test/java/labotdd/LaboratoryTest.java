@@ -25,4 +25,11 @@ class LaboratoryTest {
         );
     }
 
+    @Test void initWithDuplicateSubstanceListThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () ->
+            new Laboratory(new String[]{
+                "A", "B", "A"
+            })
+        );
+    }
 }

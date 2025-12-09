@@ -24,18 +24,15 @@ public class Laboratory {
             substanceList.put(s, 0.0);
         }
         reactions.forEach((product, reagents) -> {
-            if(product.isEmpty()) {
-                throw new IllegalArgumentException("Reaction name cannot be empty");
-            }
-            if(reagents.isEmpty()) {
-                throw new IllegalArgumentException("Reagent list cannot be empty for reaction: " + product);
+            if(product.isEmpty() || reagents.isEmpty()) {
+                throw new IllegalArgumentException("Reaction name or reagent list cannot be empty");
             }
             for(var r : reagents) {
-                if(r.name.equals(product)) {
-                    throw new IllegalArgumentException("Reaction cannot have its product as reagent");
-                }
-                if(r.quantity <= 0) {
-                    throw new IllegalArgumentException("Reagent quantity must be positive for substance: " + r.name);
+                if(r.name.equals(product) || r.quantity <= 0) {
+                    throw new IllegalArgumentException(
+                        "Reaction cannot have its product as reagent " + r.name + 
+                        "or non-positive reagent quantity" + r.name + ", " + r.quantity
+                    );
                 }
             }
         });

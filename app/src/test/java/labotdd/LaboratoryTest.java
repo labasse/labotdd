@@ -33,6 +33,22 @@ class LaboratoryTest {
         );
     }
 
+    @Test void initWithListHavingEmptyStringSubstanceThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () ->
+            new Laboratory(new String[]{
+                "A", ""
+            })
+        );
+    }
+
+    @Test void initWithListHavingNullStringSubstanceThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () ->
+            new Laboratory(new String[]{
+                "A", null
+            })
+        );
+    }
+
     @Test void addUnknownSubstanceThrowsIllegalArgumentException() {
         var test = new Laboratory(new String[]{
             "A", "B"
